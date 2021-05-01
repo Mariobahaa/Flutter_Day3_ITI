@@ -38,7 +38,7 @@ class UCard extends StatelessWidget {
                   user.name,
                   style: TextStyle(
                     fontSize: 18.0,
-                    color: Colors.cyan.shade200,
+                    color: Colors.cyan.shade100,
                   ),
                 ),
               ),

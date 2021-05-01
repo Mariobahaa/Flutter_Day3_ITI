@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => UsersPanel(),
         '/details': (context) => UserDetails()
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
