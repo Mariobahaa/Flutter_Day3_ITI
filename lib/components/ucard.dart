@@ -18,7 +18,7 @@ class UCard extends StatelessWidget {
         color: Colors.lightBlue.shade800,
         shadowColor: Colors.cyan.shade900,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0),
+          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
           child: Column(
             children: [
               Container(
