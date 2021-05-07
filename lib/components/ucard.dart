@@ -18,7 +18,7 @@ class UCard extends StatelessWidget {
         color: Colors.lightBlue.shade800,
         shadowColor: Colors.cyan.shade900,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           child: Column(
             children: [
               Container(
@@ -31,13 +31,13 @@ class UCard extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  top: 16.0,
-                  bottom: 6.0,
+                  top: 8.0,
+                  bottom: 4.0,
                 ),
                 child: Text(
                   user.name,
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     color: Colors.cyan.shade100,
                   ),
                 ),
@@ -45,7 +45,7 @@ class UCard extends StatelessWidget {
               Text(
                 user.email,
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 14.0,
                   color: Colors.cyan.shade500,
                 ),
               ),

@@ -23,7 +23,8 @@ class UserDetails extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          height: 220.0,
+          height: 200.0,
+          width: 190.0,
           child: UCard(
             user: args.user,
             onCardTap: _printDetails,
