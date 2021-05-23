@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
           buttonColor: Colors.cyan.shade500,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: Colors.cyan.shade500,
+            foregroundColor: Colors.cyan.shade100,
           )),
       initialRoute: '/',
       routes: {

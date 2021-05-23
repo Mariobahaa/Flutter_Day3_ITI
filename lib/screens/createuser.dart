@@ -21,9 +21,12 @@ class _CreateUserState extends State<CreateUser> {
             key: _formState,
             child: Column(
               children: [
-                _nameField(),
                 SizedBox(
                   height: 100,
+                ),
+                _nameField(),
+                SizedBox(
+                  height: 25,
                 ),
                 _jobField(),
                 SizedBox(
@@ -96,34 +99,37 @@ class _CreateUserState extends State<CreateUser> {
   }
 
   Widget _submitButton() {
-    return RaisedButton(
-      child: Text("Create"),
-      onPressed: () async {
-        if (_saveAndValidate()) {
-          print("Create");
-          print("${_name}");
-          ResponseUser user = await UsersRepo().createUser(_name, _job);
-          print("${user.name}");
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Success!"),
-                content: Text(
-                    "Id: ${user.id}\nname: ${user.name}\n job: ${user.job}\ncreatedAt: ${user.createdAt}"),
-                actions: [
-                  FlatButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              );
-            },
-          );
-        }
-      },
+    return Container(
+      width: 350,
+      child: RaisedButton(
+        child: Text("Create"),
+        onPressed: () async {
+          if (_saveAndValidate()) {
+            print("Create");
+            print("${_name}");
+            ResponseUser user = await UsersRepo().createUser(_name, _job);
+            print("${user.name}");
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Success!"),
+                  content: Text(
+                      "Id: ${user.id}\nname: ${user.name}\n job: ${user.job}\ncreatedAt: ${user.createdAt}"),
+                  actions: [
+                    FlatButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -1,8 +1,13 @@
+import 'package:day3/blocs/users_bloc/usersbloc.dart';
+import 'package:day3/blocs/users_bloc/usersevents.dart';
+import 'package:day3/blocs/users_bloc/usersstate.dart';
+import 'package:day3/models/appstate.dart';
 import 'package:day3/screens/userdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:day3/models/user.dart';
 import 'package:day3/components/ucard.dart';
 import 'package:day3/repos/users.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UsersPanel extends StatefulWidget {
   UsersPanel({this.title = 'Users'});
@@ -13,6 +18,62 @@ class UsersPanel extends StatefulWidget {
 }
 
 class _UsersPanelState extends State<UsersPanel> {
+  UsersBloc usersBloc;
+
+  Widget _bugrid() {
+    return BlocBuilder<UsersBloc, AppState<UsersState>>(
+      bloc: usersBloc,
+      builder: (context, state) {
+        if (state.hasData) {
+          return GridView.count(
+            padding: EdgeInsets.only(
+              top: 12.0,
+            ),
+            crossAxisCount: 2,
+            crossAxisSpacing: 5.0,
+            mainAxisSpacing: 5.0,
+            children: List.generate(
+              state.data.usersList.length,
+              (index) => UCard(
+                  user: state.data.usersList[index],
+                  onCardTap: (User user) {
+                    usersBloc.add(GetOneUserBlocEvent(userId: user.id));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return BlocProvider.value(
+                          value: usersBloc,
+                          child: UserDetails(),
+                        );
+                      },
+                    ));
+                    //  -> version 1
+                    // print(user);
+                    // Navigator.pushNamed(context, '/details',
+                    //     arguments: ScreenArguments(
+                    //         user: state.data.usersList[index],
+                    //         title: '${state.data.usersList[index].name}'));
+                  }),
+            ),
+          );
+        } else {
+          return Container(
+            color: Colors.lightBlue.shade800,
+            child: Center(
+              child: Text(
+                "No data to Show",
+                style: TextStyle(
+                  color: Colors.cyan.shade100,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32,
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
   Widget _fugrid() {
     return FutureBuilder<List<User>>(
         future: _fusers,
@@ -40,17 +101,18 @@ class _UsersPanelState extends State<UsersPanel> {
             );
           } else {
             return Container(
-                color: Colors.lightBlue.shade800,
-                child: Center(
-                  child: Text(
-                    "No data to Show",
-                    style: TextStyle(
-                      color: Colors.cyan.shade100,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 32,
-                    ),
+              color: Colors.lightBlue.shade800,
+              child: Center(
+                child: Text(
+                  "No data to Show",
+                  style: TextStyle(
+                    color: Colors.cyan.shade100,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
                   ),
-                ));
+                ),
+              ),
+            );
           }
         });
   }
@@ -120,7 +182,9 @@ class _UsersPanelState extends State<UsersPanel> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fusers = UsersRepo().getUsers();
+    //_fusers = UsersRepo().getUsers();
+    usersBloc = UsersBloc();
+    usersBloc.add(GetAllUsersBlocEvent());
   }
 
   @override
@@ -129,7 +193,10 @@ class _UsersPanelState extends State<UsersPanel> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
+          //version 2
           dynamic newUser = Navigator.pushNamed(context, '/create') ?? User();
+
+          //version 1
           //   Navigator.pushNamed(context, '/details',
           //       arguments: ScreenArguments(
           //           user: newUser ?? User(), title: '${newUser?.name}'));
@@ -138,9 +205,8 @@ class _UsersPanelState extends State<UsersPanel> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        child: this._fugrid(),
-      ),
+      body: Container(child: this._bugrid() //this._fugrid(),
+          ),
     );
   }
 }
