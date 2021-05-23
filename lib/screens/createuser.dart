@@ -1,3 +1,5 @@
+import 'package:day3/blocs/create_bloc/createbloc.dart';
+import 'package:day3/blocs/create_bloc/createevents.dart';
 import 'package:day3/repos/users.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +9,19 @@ class CreateUser extends StatefulWidget {
 }
 
 class _CreateUserState extends State<CreateUser> {
-  String _name, _job;
+  //String _name, _job;
   final _formState = GlobalKey<FormState>();
+  CreateBloc createBloc;
+  // bloc
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    createBloc = CreateBloc();
+    //init bloc
+    //init formstate
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,8 +75,9 @@ class _CreateUserState extends State<CreateUser> {
 
   Widget _nameField() {
     return TextFormField(
-      onChanged: (value) {
-        if (_saveAndValidate()) _name = value; //mlha4 lazma
+      onChanged: (val) {
+        if (_saveAndValidate())
+          createBloc.add(NameChangedBlocEvent(value: val));
       },
       decoration: _getGenericInputDecoration("Name"),
       validator: (String value) {
@@ -73,16 +87,17 @@ class _CreateUserState extends State<CreateUser> {
           return null;
         }
       },
-      onSaved: (String value) {
-        _name = value;
+      onSaved: (String val) {
+        createBloc.add(NameChangedBlocEvent(value: val));
+        print(createBloc.state.data.job);
       },
     );
   }
 
   Widget _jobField() {
     return TextFormField(
-      onChanged: (value) {
-        if (_saveAndValidate()) _job = value;
+      onChanged: (val) {
+        if (_saveAndValidate()) createBloc.add(JobChangedBlocEvent(value: val));
       },
       decoration: _getGenericInputDecoration("Job"),
       validator: (String value) {
@@ -92,8 +107,9 @@ class _CreateUserState extends State<CreateUser> {
           return null;
         }
       },
-      onSaved: (String value) {
-        _job = value;
+      onSaved: (String val) {
+        //if (_saveAndValidate())
+        createBloc.add(JobChangedBlocEvent(value: val));
       },
     );
   }
@@ -106,16 +122,18 @@ class _CreateUserState extends State<CreateUser> {
         onPressed: () async {
           if (_saveAndValidate()) {
             print("Create");
-            print("${_name}");
-            ResponseUser user = await UsersRepo().createUser(_name, _job);
-            print("${user.name}");
+            createBloc.add(FormSubmitBlocEvent());
+            print(createBloc.state.data.name);
+            // print("${_name}");
+            // ResponseUser user = await UsersRepo().createUser(_name, _job);
+            // print("${user.name}");
             showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text("Success!"),
                   content: Text(
-                      "Id: ${user.id}\nname: ${user.name}\n job: ${user.job}\ncreatedAt: ${user.createdAt}"),
+                      "Id: ${createBloc.state.data.responseUser.id}\nname: ${createBloc.state.data.responseUser.name}\n job: ${createBloc.state.data.responseUser.job}\ncreatedAt: ${createBloc.state.data.responseUser.createdAt}"),
                   actions: [
                     FlatButton(
                       child: Text("OK"),
@@ -141,6 +159,8 @@ class ResponseUser {
     job = json['job'];
     id = json['id'];
     createdAt = json['createdAt'];
+    print("Created At!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    print(createdAt);
   }
 }
 
