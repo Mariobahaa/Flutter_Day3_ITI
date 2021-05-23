@@ -130,19 +130,26 @@ class _CreateUserState extends State<CreateUser> {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Success!"),
-                  content: Text(
-                      "Id: ${createBloc.state.data.responseUser.id}\nname: ${createBloc.state.data.responseUser.name}\n job: ${createBloc.state.data.responseUser.job}\ncreatedAt: ${createBloc.state.data.responseUser.createdAt}"),
-                  actions: [
-                    FlatButton(
-                      child: Text("OK"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
-                  ],
-                );
+                if (createBloc.state.hasData &&
+                    createBloc.state.data.responseUser != null)
+                  return AlertDialog(
+                    title: Text("Success!"),
+                    content: Text(
+                        "Id: ${createBloc.state.data.responseUser.id}\nname: ${createBloc.state.data.responseUser.name}\n job: ${createBloc.state.data.responseUser.job}\ncreatedAt: ${createBloc.state.data.responseUser.createdAt}"),
+                    actions: [
+                      FlatButton(
+                        child: Text("OK"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                else
+                  return SizedBox(
+                    height: 0,
+                    width: 0,
+                  );
               },
             );
           }
